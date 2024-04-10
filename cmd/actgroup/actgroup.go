@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"runtime/debug"
 )
-
-var Version string = "UNKNOWN"
 
 func main() {
 	var wantVersion bool
@@ -22,7 +21,7 @@ func main() {
 	flag.Parse()
 
 	if wantVersion {
-		fmt.Fprintf(os.Stdout, "actgroup %s\n", Version)
+		fmt.Fprintf(os.Stdout, "actgroup %s\n", Version())
 		os.Exit(0)
 	}
 
@@ -96,4 +95,19 @@ func NewRun(autoDetect bool, title string, rest []string) *Run {
 func InGitHubActions() bool {
 	// https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
 	return os.Getenv("GITHUB_ACTIONS") == "true"
+}
+
+func Version() string {
+	info, ok := debug.ReadBuildInfo()
+	if ok {
+		if info.Main.Sum != "" {
+			return info.Main.Version
+		}
+		for _, s := range info.Settings {
+			if s.Key == "vcs.revision" {
+				return s.Value
+			}
+		}
+	}
+	return "UNKNOWN"
 }
