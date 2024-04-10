@@ -49,6 +49,19 @@ Wed 10 Apr 2024 10:03:46 UTC
 By default `actgroup` auto detects GitHub Actions and use the correct log grouping format.
 based on the existence of `GITHUB_ACTIONS=true` env var.
 
+When not running in GitHub Actions, the output looks like this:
+
+```sh
+actgroup -title "Show time" date -u
+```
+
+Output:
+
+```
+--- Show time
+Wed 10 Apr 2024 10:03:46 UTC
+```
+
 To force it to always output using the GitHub Actions format, use `-force`:
 
 ```sh
