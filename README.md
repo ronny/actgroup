@@ -7,7 +7,7 @@ https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-
 ## Installation
 
 ```sh
-go install github.com/ronny/actgroup@latest
+go install github.com/ronny/actgroup/cmd/actgroup@latest
 ```
 
 Or install a prebuilt binary from [the Releases page](https://github.com/ronny/actgroup/releases).
