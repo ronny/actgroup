@@ -8,7 +8,7 @@ This is useful when used in a `Makefile`, for example:
 
 ```Makefile
 build:
-  actgroup go build ./cmd/foo
+	actgroup go build ./cmd/foo
 ```
 
 ## Installation
