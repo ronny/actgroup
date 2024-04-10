@@ -4,6 +4,13 @@
 as described here:
 https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions?tool=bash#grouping-log-lines
 
+This is useful when used in a `Makefile`, for example:
+
+```Makefile
+build:
+  actgroup go build ./cmd/foo
+```
+
 ## Installation
 
 ```sh
