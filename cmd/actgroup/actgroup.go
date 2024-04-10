@@ -6,17 +6,18 @@ import (
 	"os"
 	"os/exec"
 	"runtime/debug"
+	"strings"
 )
 
 func main() {
 	var wantVersion bool
 	flag.BoolVar(&wantVersion, "version", false, "show version")
 
-	var autoDetect bool
-	flag.BoolVar(&autoDetect, "auto", false, "enable only when running in GitHub Actions")
+	var force bool
+	flag.BoolVar(&force, "force", false, "use GitHub Actions group format even when not running in GitHub Actions")
 
 	var title string
-	flag.StringVar(&title, "title", "", "the group title, defaults to the command")
+	flag.StringVar(&title, "title", "", "the group title, defaults to the command and args")
 
 	flag.Parse()
 
@@ -25,7 +26,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	run := NewRun(autoDetect, title, flag.Args())
+	run := NewRun(force, title, flag.Args())
 
 	if run.Command == "" {
 		flag.Usage()
@@ -40,6 +41,8 @@ func main() {
 	if run.Enabled() {
 		// https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions?tool=bash#grouping-log-lines
 		fmt.Fprintf(os.Stdout, "::group::%s\n", run.Title)
+	} else {
+		fmt.Fprintf(os.Stdout, "--- %s\n", run.Title)
 	}
 
 	exitCode := 0
@@ -58,24 +61,24 @@ func main() {
 }
 
 type Run struct {
-	Title      string
-	Command    string
-	Args       []string
-	AutoDetect bool
+	Title   string
+	Command string
+	Args    []string
+	Force   bool
 }
 
 func (r *Run) Enabled() bool {
-	if !r.AutoDetect {
+	if r.Force {
 		return true
 	}
 
 	return InGitHubActions()
 }
 
-func NewRun(autoDetect bool, title string, rest []string) *Run {
+func NewRun(force bool, title string, rest []string) *Run {
 	run := &Run{
-		AutoDetect: autoDetect,
-		Title:      title,
+		Force: force,
+		Title: title,
 	}
 
 	if len(rest) > 0 {
@@ -86,7 +89,13 @@ func NewRun(autoDetect bool, title string, rest []string) *Run {
 	}
 
 	if run.Title == "" {
-		run.Title = run.Command
+		sb := strings.Builder{}
+		sb.WriteString(run.Command)
+		for _, arg := range run.Args {
+			sb.WriteString(" ")
+			sb.WriteString(arg)
+		}
+		run.Title = sb.String()
 	}
 
 	return run
