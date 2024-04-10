@@ -41,3 +41,12 @@ Output:
 Wed 10 Apr 2024 10:03:46 UTC
 ::endgroup::
 ```
+
+### Auto detect GitHub Actions
+
+To enable/disable based on whether actgroup is running in a GitHub Actions
+runner or not (basically checks the existence of `GITHUB_ACTIONS=true` env var):
+
+```sh
+actgroup -auto -title "Show time" date -u
+```
