@@ -30,7 +30,7 @@ Wed 10 Apr 2024 01:02:03 UTC
 
 ### With an implicit group title
 
-When the title is not specified, it's inferred from the command (but not the args).
+When the title is not specified, it's inferred from the command and the args.
 
 ```sh
 actgroup date -u
@@ -39,16 +39,18 @@ actgroup date -u
 Output:
 
 ```
-::group::date
+::group::date -u
 Wed 10 Apr 2024 10:03:46 UTC
 ::endgroup::
 ```
 
 ### Auto detect GitHub Actions
 
-To enable/disable based on whether actgroup is running in a GitHub Actions
-runner or not (basically checks the existence of `GITHUB_ACTIONS=true` env var):
+By default `actgroup` auto detects GitHub Actions and use the correct log grouping format.
+based on the existence of `GITHUB_ACTIONS=true` env var.
+
+To force it to always output using the GitHub Actions format, use `--force`:
 
 ```sh
-actgroup -auto -title "Show time" date -u
+actgroup -force -title "Show time" date -u
 ```
