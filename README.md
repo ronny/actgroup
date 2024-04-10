@@ -10,6 +10,8 @@ https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-
 go install github.com/ronny/actgroup@latest
 ```
 
+Or install a prebuilt binary from [the Releases page](https://github.com/ronny/actgroup/releases).
+
 ## Usage
 
 ### With an explicit group title
