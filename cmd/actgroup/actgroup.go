@@ -50,7 +50,7 @@ func main() {
 	err := cmd.Run()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "\n%s\n", err)
-		exitCode := cmd.ProcessState.ExitCode()
+		exitCode = cmd.ProcessState.ExitCode()
 		fmt.Fprintf(os.Stderr, "\nexit code %d\n", exitCode)
 	}
 
